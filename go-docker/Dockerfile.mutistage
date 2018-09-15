@@ -1,0 +1,18 @@
+# Build stage
+FROM golang:1.11-alpine as builder
+
+RUN mkdir /app
+COPY  . /app
+
+WORKDIR /app
+
+RUN go build -o main .
+
+# Run stage
+FROM alpine:3.8
+
+WORKDIR /root
+
+COPY --from=builder /app/main .
+
+CMD ["./main"]
